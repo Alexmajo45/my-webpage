@@ -1,0 +1,8 @@
+[
+  { "title": "ECB holds rates as euro-area inflation steadies", "url": "https://example.com/news/ecb-holds-rates", "summary": "Sample item. The Governing Council left policy unchanged; BTP spread narrowed after the announcement.", "publishedAt": "2026-11-09T07:10:00.000Z" },
+  { "title": "ASML order book beats expectations on AI chip demand", "url": "https://example.com/news/asml-orders", "summary": "Sample item. The semiconductor equipment maker reported stronger bookings.", "publishedAt": "2026-11-09T06:40:00.000Z" },
+  { "title": "Microsoft expands Azure capacity in Europe", "url": "https://example.com/news/msft-azure-europe", "summary": "Sample item. New data-centre regions announced.", "publishedAt": "2026-11-08T17:05:00.000Z" },
+  { "title": "Global equities end the week higher", "url": "https://example.com/news/global-equities-week", "summary": "Sample item. Broad indices advanced for a third session.", "publishedAt": "2026-11-08T16:30:00.000Z" },
+  { "title": "Milan transport strike called for Friday", "url": "https://example.com/news/milan-strike", "summary": "Sample item. Metro and surface lines affected outside guaranteed hours.", "publishedAt": "2026-11-08T09:00:00.000Z" },
+  { "title": "Bitcoin steadies after volatile session", "url": "https://example.com/news/bitcoin-steadies", "summary": "Sample item. Crypto markets calmer after a sharp intraday move.", "publishedAt": "2026-11-07T21:15:00.000Z" }
+]
