@@ -1,0 +1,23 @@
+{
+  "mode": "live",
+  "owner": "Your name",
+  "timezone": "Europe/Rome",
+  "baseCurrency": "EUR",
+  "host": "127.0.0.1",
+  "port": 4317,
+  "quotes": { "provider": "stooq" },
+  "feeds": [
+    { "name": "ECB press", "url": "https://www.ecb.europa.eu/rss/press.html" },
+    { "name": "BBC Business", "url": "https://feeds.bbci.co.uk/news/business/rss.xml" },
+    { "name": "Il Sole 24 Ore - Finanza", "url": "https://www.ilsole24ore.com/rss/finanza.xml" }
+  ],
+  "jobs": [
+    { "name": "refresh-quotes", "everyMinutes": 30 },
+    { "name": "refresh-news", "everyMinutes": 30 },
+    { "name": "morning-brief", "at": "07:30" },
+    { "name": "weekly-review", "at": "18:00", "weekday": 0 }
+  ],
+  "agent": { "model": "claude-opus-5-5", "effort": "medium", "maxToolRounds": 8 },
+  "mcp": { "enabled": true, "allowWrite": false },
+  "notify": { "ntfyUrl": "", "webhookUrl": "", "telegramChatId": "" }
+}
