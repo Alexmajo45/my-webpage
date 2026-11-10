@@ -2,152 +2,83 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
-  <title>Cortex</title>
+  <title>Today – Cortex</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <header class="top">
-    <div class="brand">
-      <span class="mark" aria-hidden="true"></span>
-      <div>
-        <h1>Cortex</h1>
-        <p id="dateline" class="muted">Loading…</p>
+  <a class="skip" href="#view">Skip to content</a>
+  <div class="shell">
+    <nav class="nav" aria-label="Main">
+      <a class="logo" href="#/today" aria-label="Cortex, go to Today"><span class="mark" aria-hidden="true"></span><span class="logo-text">Cortex</span></a>
+      <div class="nav-links">
+        <a href="#/today" data-view="today">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>
+          <span>Today</span></a>
+        <a href="#/plan" data-view="plan">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1.3 1.3L7 5M3.5 12l1.3 1.3L7 11M3.5 18l1.3 1.3L7 17"/></svg>
+          <span>Plan</span></a>
+        <a href="#/money" data-view="money">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="m7 15 4-4 3 3 5-6"/></svg>
+          <span>Money</span></a>
+        <a href="#/saved" data-view="saved">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z"/></svg>
+          <span>Saved</span></a>
+        <a href="#/ask" data-view="ask">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>
+          <span>Ask</span></a>
       </div>
-    </div>
-    <div id="chips" class="chips"></div>
-  </header>
+      <a class="nav-settings" href="#/settings" data-view="settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.5"/><circle cx="10" cy="17" r="2.5"/></svg>
+        <span>Settings</span></a>
+    </nav>
 
-  <p id="banner" class="banner" role="status" hidden></p>
+    <main id="view" tabindex="-1"><p class="muted">Loading…</p></main>
+  </div>
 
-  <main class="layout">
-    <div class="col">
-      <section class="card" aria-labelledby="brief-h">
-        <div class="card-head">
-          <h2 id="brief-h">Brief</h2>
-          <span id="brief-meta" class="muted small"></span>
-          <button class="ghost" data-job="morning-brief">Refresh brief</button>
-        </div>
-        <div id="brief" class="prose"></div>
-      </section>
+  <dialog id="holding-dialog" aria-labelledby="holding-title">
+    <form id="holding-form" method="dialog">
+      <h2 id="holding-title">Add a holding</h2>
+      <p class="muted" id="holding-help">Enter what you own. Cortex only tracks it; it never trades.</p>
+      <div class="fields">
+        <label>Ticker symbol<input name="symbol" required placeholder="e.g. VWCE.DE…" autocomplete="off" spellcheck="false"></label>
+        <label>Name<input name="name" placeholder="e.g. Vanguard All-World…" autocomplete="off"></label>
+        <label>How many you own<input name="quantity" type="number" inputmode="decimal" step="any" min="0" value="0"><small>Enter 0 to just watch it.</small></label>
+        <label>Price you paid, each<input name="costBasis" type="number" inputmode="decimal" step="any" min="0"></label>
+        <label>Currency<input name="currency" required value="EUR" maxlength="3" autocomplete="off" spellcheck="false"></label>
+        <label>Type
+          <select name="assetClass">
+            <option value="equity">Share</option><option value="etf">Fund (ETF)</option><option value="bond">Bond</option>
+            <option value="crypto">Crypto</option><option value="cash">Cash</option><option value="other">Other</option>
+          </select></label>
+        <label class="wide">Words to watch for in the news<input name="keywords" placeholder="e.g. semiconductor, chip…" autocomplete="off"><small>Separate with commas. Headlines containing these are shown to you.</small></label>
+      </div>
+      <p class="form-error" id="holding-error" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn danger" id="holding-remove" hidden>Remove holding</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button class="btn primary" value="save">Save holding</button>
+      </div>
+    </form>
+  </dialog>
 
-      <section class="card" aria-labelledby="money-h">
-        <div class="card-head">
-          <h2 id="money-h">Portfolio</h2>
-          <span id="money-meta" class="muted small"></span>
-          <button class="ghost" data-job="refresh-quotes">Refresh prices</button>
-        </div>
-        <div id="money-hero" class="hero"></div>
-        <div id="allocation"></div>
-        <div id="money-warn"></div>
-        <div class="table-wrap"><table id="holdings"></table></div>
-        <details class="adder">
-          <summary>Add or update a holding</summary>
-          <form id="holding-form" class="grid-form">
-            <label>Symbol <input name="symbol" required placeholder="VWCE.DE" autocomplete="off"></label>
-            <label>Name <input name="name" placeholder="Vanguard FTSE All-World" autocomplete="off"></label>
-            <label>Quantity <input name="quantity" type="number" step="any" min="0" value="0"></label>
-            <label>Cost per unit <input name="costBasis" type="number" step="any" min="0"></label>
-            <label>Currency <input name="currency" required value="EUR" maxlength="3" autocomplete="off"></label>
-            <label>Class
-              <select name="assetClass">
-                <option value="equity">Equity</option><option value="etf">ETF</option><option value="bond">Bond</option>
-                <option value="crypto">Crypto</option><option value="cash">Cash</option><option value="other">Other</option>
-              </select>
-            </label>
-            <label class="wide">News keywords, comma-separated <input name="keywords" placeholder="semiconductor, chip" autocomplete="off"></label>
-            <button class="primary">Save holding</button>
-            <p class="muted small wide">Quantity 0 keeps a symbol on the watchlist only. Cortex tracks; it never trades.</p>
-          </form>
-        </details>
-      </section>
+  <dialog id="note-dialog" aria-labelledby="note-title">
+    <form id="note-form" method="dialog">
+      <h2 id="note-title">Why did you save this?</h2>
+      <p class="muted">A line in your own words makes it findable later.</p>
+      <label class="sr-only" for="note-text">Note</label>
+      <textarea id="note-text" name="note" rows="3" placeholder="e.g. Opening exercise for the leadership workshop…"></textarea>
+      <div class="dialog-actions">
+        <span class="spacer"></span>
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button class="btn primary" value="save">Save note</button>
+      </div>
+    </form>
+  </dialog>
 
-      <section class="card" aria-labelledby="news-h">
-        <div class="card-head">
-          <h2 id="news-h">News</h2>
-          <label class="check"><input type="checkbox" id="news-relevant"> Only my holdings</label>
-          <button class="ghost" data-job="refresh-news">Refresh news</button>
-        </div>
-        <ul id="news" class="list"></ul>
-      </section>
-
-      <section class="card" aria-labelledby="lib-h">
-        <div class="card-head">
-          <h2 id="lib-h">Library</h2>
-          <span id="lib-meta" class="muted small"></span>
-          <label class="ghost file">Import Instagram export<input id="lib-file" type="file" accept=".json,application/json" multiple hidden></label>
-        </div>
-        <p class="muted small">Posts you saved or liked on Instagram, turned into a backlog you can search, triage and convert into tasks.</p>
-        <div class="row">
-          <input id="lib-q" type="search" placeholder="Search author, collection, topic or note" aria-label="Search library">
-        </div>
-        <div id="lib-topics" class="chips"></div>
-        <ul id="library" class="list"></ul>
-      </section>
-    </div>
-
-    <div class="col">
-      <section class="card chat" aria-labelledby="chat-h">
-        <div class="card-head">
-          <h2 id="chat-h">Ask Cortex</h2>
-          <button class="ghost" id="chat-reset">New conversation</button>
-        </div>
-        <div id="chat-log" class="chat-log" aria-live="polite"></div>
-        <form id="chat-form" class="row">
-          <input name="message" placeholder="What needs my attention today?" autocomplete="off" aria-label="Message">
-          <button class="primary">Send</button>
-        </form>
-        <p id="chat-note" class="muted small"></p>
-      </section>
-
-      <section class="card" aria-labelledby="tasks-h">
-        <div class="card-head"><h2 id="tasks-h">Tasks</h2><span id="tasks-meta" class="muted small"></span></div>
-        <form id="task-form" class="row">
-          <input name="title" required placeholder="Add a task" autocomplete="off" aria-label="Task">
-          <input name="due" type="date" aria-label="Due date">
-          <button class="primary">Add</button>
-        </form>
-        <ul id="tasks" class="list"></ul>
-      </section>
-
-      <section class="card" aria-labelledby="habits-h">
-        <div class="card-head"><h2 id="habits-h">Habits</h2><span class="muted small">last 7 days</span></div>
-        <div id="habits"></div>
-        <form id="habit-form" class="row">
-          <input name="name" required placeholder="New habit" autocomplete="off" aria-label="Habit name">
-          <button class="primary">Add</button>
-        </form>
-      </section>
-
-      <section class="card" aria-labelledby="journal-h">
-        <div class="card-head"><h2 id="journal-h">Journal</h2></div>
-        <form id="journal-form" class="stack">
-          <textarea name="text" rows="3" required placeholder="One line about today" aria-label="Journal entry"></textarea>
-          <div class="row">
-            <label class="muted small">Mood
-              <select name="mood"><option value="">–</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
-            </label>
-            <button class="primary">Save</button>
-          </div>
-        </form>
-        <ul id="journal" class="list"></ul>
-      </section>
-
-      <section class="card" aria-labelledby="auto-h">
-        <div class="card-head"><h2 id="auto-h">Automations</h2></div>
-        <ul id="jobs" class="list"></ul>
-        <h3>Recent runs</h3>
-        <ul id="runs" class="list small"></ul>
-      </section>
-
-      <section class="card" aria-labelledby="mem-h">
-        <div class="card-head"><h2 id="mem-h">What Cortex remembers</h2></div>
-        <ul id="memories" class="list small"></ul>
-      </section>
-    </div>
-  </main>
-
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <div id="tip" class="tip" role="tooltip" hidden></div>
   <script type="module" src="/app.js"></script>
 </body>

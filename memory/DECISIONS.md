@@ -2,6 +2,10 @@
 
 Newest first. One entry per decision: what, why, what was rejected. Do not edit past entries; supersede them.
 
+## D-008 Interface rebuilt around a Today view and six destinations (2026-11-10)
+
+The user judged the first single-page dashboard "not user friendly". Cause: ten panels at equal weight, internal jargon, forms always open. Rebuilt as Today, Plan, Money, Saved, Ask and Settings, with plain-language labels, dialogs for rare forms, Undo on completion and archive, and 44px touch targets. Guidance taken from Vercel's Web Interface Guidelines, Anthropic's frontend-design skill and GitHub Primer. Rejected: restyling the single page, because the problem was structure, not paint. Done inline by the Master rather than through the Designer subagent or a spec; it has not been through either gate.
+
 ## D-007 Instagram via official data export, not scraping (2026-11-09)
 
 Instagram has no API for a personal account's saved or liked posts. Browser automation and private-API libraries breach its terms and risk the account. We import the official JSON export. Consequence: items arrive with link, author, date and collection but no caption; enrichment is a separate, open decision (roadmap M3).

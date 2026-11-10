@@ -9,6 +9,7 @@ export const ASSET_CLASSES = ['equity', 'etf', 'bond', 'crypto', 'cash', 'other'
 export interface Holding { id: number; symbol: string; name: string; quantity: number; cost_basis: number | null; currency: string; asset_class: string; keywords: string }
 export interface HoldingView {
   id: number; symbol: string; name: string; quantity: number; currency: string; assetClass: string;
+  costBasis: number | null; keywords: string;
   price: number | null; priceDay: string | null; dayChangePct: number | null;
   valueBase: number | null; dayChangeBase: number | null; pnlBase: number | null; pnlPct: number | null;
   spark: { day: string; close: number }[];
@@ -21,14 +22,14 @@ export interface PortfolioView {
 
 export function upsertHolding(db: DB, input: Record<string, unknown>): Holding {
   const symbol = String(input.symbol ?? '').trim().toUpperCase();
-  if (!/^[A-Z0-9.^=-]{1,20}$/.test(symbol)) throw new InputError('symbol must be 1-20 characters: letters, digits, . ^ = -');
+  if (!/^[A-Z0-9.^=-]{1,20}$/.test(symbol)) throw new InputError('The ticker symbol can be up to 20 letters, digits or the characters . ^ = -');
   const name = String(input.name ?? '').trim().slice(0, 120) || symbol;
   const quantity = Number(input.quantity ?? 0);
-  if (!Number.isFinite(quantity) || quantity < 0) throw new InputError('quantity must be a non-negative number (0 = watchlist only)');
+  if (!Number.isFinite(quantity) || quantity < 0) throw new InputError('The quantity you own must be zero or more');
   const cost = input.costBasis == null || input.costBasis === '' ? null : Number(input.costBasis);
-  if (cost !== null && (!Number.isFinite(cost) || cost < 0)) throw new InputError('costBasis must be a non-negative number per unit');
+  if (cost !== null && (!Number.isFinite(cost) || cost < 0)) throw new InputError('The price you paid must be zero or more');
   const currency = String(input.currency ?? '').trim().toUpperCase();
-  if (!/^[A-Z]{3}$/.test(currency)) throw new InputError('currency must be a 3-letter code');
+  if (!/^[A-Z]{3}$/.test(currency)) throw new InputError('The currency must be a 3-letter code such as EUR or USD');
   const assetClass = String(input.assetClass ?? 'equity');
   if (!(ASSET_CLASSES as readonly string[]).includes(assetClass)) throw new InputError(`assetClass must be one of ${ASSET_CLASSES.join(', ')}`);
   const keywords = String(input.keywords ?? '').slice(0, 300);
@@ -98,6 +99,7 @@ export function portfolioView(db: DB, cfg: Config): PortfolioView {
     const pnlBase = last && h.cost_basis != null ? toBase((last.close - h.cost_basis) * h.quantity) : null;
     return {
       id: h.id, symbol: h.symbol, name: h.name, quantity: h.quantity, currency: h.currency, assetClass: h.asset_class,
+      costBasis: h.cost_basis, keywords: h.keywords,
       price: last?.close ?? null, priceDay: last?.day ?? null,
       dayChangePct: last && prev ? ((last.close - prev.close) / prev.close) * 100 : null,
       valueBase, dayChangeBase, pnlBase,

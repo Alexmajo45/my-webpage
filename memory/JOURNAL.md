@@ -2,6 +2,12 @@
 
 Dated notes from each session, newest first: what was done, what was learned, review outcomes. Written by `/handoff`.
 
+## 2026-11-10 Interface redesign
+
+The user saw the first dashboard and said it did not look user friendly. Rebuilt `app/web/` (D-008) and rewrote `docs/design-system.md` with the principles behind it. Checked every view in a browser at 1280px and 390px, light and dark, and exercised add task, complete with Undo, habit toggle, holding edit with an inline error, and saved-post search. Server change: holding views now carry cost and keywords so the edit dialog can pre-fill; validation messages reworded for people.
+
+Lesson: the first version mirrored the data model. Start interface work from what the user needs to decide, not from what the tables hold. Still to do: the redesign is unreviewed (M1-01 now covers it too).
+
 ## 2026-11-09 Foundation session
 
 Researched the landscape (dashboards, finance trackers, Jarvis-style agents, EGM) and verified star counts and activity through the GitHub API. Chose to build a thin integrated layer (D-001).

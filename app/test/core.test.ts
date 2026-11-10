@@ -53,9 +53,9 @@ test('portfolio: a holding without an FX rate is excluded and flagged, not silen
 
 test('portfolio: input validation', () => {
   const { db } = fresh();
-  assert.throws(() => upsertHolding(db, { symbol: 'bad symbol!', currency: 'EUR' }), /symbol/);
+  assert.throws(() => upsertHolding(db, { symbol: 'bad symbol!', currency: 'EUR' }), /ticker symbol/);
   assert.throws(() => upsertHolding(db, { symbol: 'OK', currency: 'EURO' }), /currency/);
-  assert.throws(() => upsertHolding(db, { symbol: 'OK', currency: 'EUR', quantity: -1 }), /quantity/);
+  assert.throws(() => upsertHolding(db, { symbol: 'OK', currency: 'EUR', quantity: -1 }), /quantity you own/);
 });
 
 test('quotes: demo series is deterministic and stable when the window grows; stooq CSV parses', () => {

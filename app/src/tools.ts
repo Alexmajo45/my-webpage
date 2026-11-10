@@ -65,7 +65,7 @@ export const TOOLS: ToolDef[] = [
     name: 'get_portfolio', readOnly: true,
     description: 'Full portfolio: every holding with price, day change, value in base currency and profit or loss, plus allocation by asset class. Figures are for tracking, not advice.',
     inputSchema: obj({}),
-    run: (ctx) => { const p = portfolioView(ctx.db, ctx.cfg); return { ...p, holdings: p.holdings.map(({ spark, ...h }) => h) }; },
+    run: (ctx) => { const p = portfolioView(ctx.db, ctx.cfg); return { ...p, holdings: p.holdings.map(({ spark, keywords, ...h }) => h) }; },
   },
   {
     name: 'search_news', readOnly: true, untrusted: true,
